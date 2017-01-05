@@ -1,0 +1,22 @@
+
+MODULEMAP_FILE[sdk=iphonesimulator*] = $(SRCROOT)/Modules/CommonCrypto/iphonesimulator/module.modulemap
+MODULEMAP_FILE[sdk=iphoneos*] = $(SRCROOT)/Modules/CommonCrypto/iphoneos/module.modulemap
+MODULEMAP_FILE[sdk=macosx*] = $(SRCROOT)/Modules/CommonCrypto/macosx/module.modulemap
+
+PRODUCT_NAME = CommonCrypto
+DYLIB_INSTALL_NAME_BASE = @rpath
+LD_RUNPATH_SEARCH_PATHS = @executable_path/Frameworks @loader_path/Frameworks
+DEFINES_MODULE = YES
+INFOPLIST_FILE = $(SRCROOT)/Modules/CommonCrypto/Info.plist
+
+SKIP_INSTALL = YES
+
+CURRENT_PROJECT_VERSION = 1
+VERSIONING_SYSTEM = apple-generic
+
+
+
+
+//DEBUG_INFORMATION_FORMAT = dwarf-with-dsym
+
+//PRODUCT_BUNDLE_IDENTIFIER = com.serhiyredko.CommonCrypto

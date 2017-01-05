@@ -1,0 +1,21 @@
+
+PRODUCT_BUNDLE_IDENTIFIER = com.serhiyredko.WebpagePersistentStorage
+PRODUCT_NAME = $(TARGET_NAME)
+
+DYLIB_COMPATIBILITY_VERSION = 1
+DYLIB_CURRENT_VERSION = 1
+DYLIB_INSTALL_NAME_BASE = @rpath
+OTHER_LDFLAGS = -lxml2
+LD_RUNPATH_SEARCH_PATHS = $(inherited) @executable_path/Frameworks @loader_path/Frameworks
+DEFINES_MODULE = YES
+INFOPLIST_FILE = WebpagePersistentStorage/Info.plist
+
+HEADER_SEARCH_PATHS = $(SDKROOT)/usr/include/libxml2
+INSTALL_PATH = $(LOCAL_LIBRARY_DIR)/Frameworks
+SKIP_INSTALL = YES
+
+
+//CODE_SIGN_IDENTITY =
+//DEVELOPMENT_TEAM = 28GAJ8X8U7
+//SWIFT_VERSION = 3.0
+//
