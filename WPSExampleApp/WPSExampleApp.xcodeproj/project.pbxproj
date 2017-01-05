@@ -15,8 +15,6 @@
 		E5630DF61E1E441D00D9C53A /* PageURLViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5630DF31E1E441D00D9C53A /* PageURLViewController.swift */; };
 		E5630DF71E1E441D00D9C53A /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5630DF41E1E441D00D9C53A /* SettingsViewController.swift */; };
 		E5630DFA1E1E447300D9C53A /* WebpagePersistentStorage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E5630DF91E1E447300D9C53A /* WebpagePersistentStorage.framework */; };
-		E5630DFD1E1E46BA00D9C53A /* libxml2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E5630DFC1E1E46BA00D9C53A /* libxml2.framework */; };
-		E5630DFF1E1E46BE00D9C53A /* CommonCrypto.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E5630DFE1E1E46BE00D9C53A /* CommonCrypto.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -39,8 +37,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E5630DFF1E1E46BE00D9C53A /* CommonCrypto.framework in Frameworks */,
-				E5630DFD1E1E46BA00D9C53A /* libxml2.framework in Frameworks */,
 				E5630DFA1E1E447300D9C53A /* WebpagePersistentStorage.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

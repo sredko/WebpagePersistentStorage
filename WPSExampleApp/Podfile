@@ -1,0 +1,11 @@
+platform :ios, '9.0'
+
+def application_pods
+    use_frameworks!
+    pod 'WebpagePersistentStorage', :git => 'https://github.com/sredko/WebpagePersistentStorage.git', :branch => 'master'
+end
+
+
+target 'WPSExampleApp' do
+    application_pods
+end
