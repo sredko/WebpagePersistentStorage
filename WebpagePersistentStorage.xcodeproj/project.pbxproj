@@ -66,6 +66,7 @@
 		E5630DC71E1E129900D9C53A /* libxml2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E5630D941E1E110C00D9C53A /* libxml2.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		E5630DCB1E1E376E00D9C53A /* libxml2.h in Headers */ = {isa = PBXBuildFile; fileRef = E5630DCA1E1E376E00D9C53A /* libxml2.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		E5630DCD1E1E378000D9C53A /* CommonCrypto.h in Headers */ = {isa = PBXBuildFile; fileRef = E5630DCC1E1E378000D9C53A /* CommonCrypto.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		E5630E021E1EEBF100D9C53A /* XML+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5630E011E1EEBF100D9C53A /* XML+Extensions.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -144,6 +145,7 @@
 		E5630DD11E1E3AB400D9C53A /* Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Release.xcconfig; sourceTree = "<group>"; };
 		E5630DD21E1E3AB400D9C53A /* WebpagePersistentStorage.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = WebpagePersistentStorage.xcconfig; sourceTree = "<group>"; };
 		E5630DD31E1E3EC000D9C53A /* WebpagePersistentStorageTests.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = WebpagePersistentStorageTests.xcconfig; sourceTree = "<group>"; };
+		E5630E011E1EEBF100D9C53A /* XML+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "XML+Extensions.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -250,6 +252,7 @@
 				E5630D431E1E106100D9C53A /* String+Extensions.swift */,
 				E5630D441E1E106100D9C53A /* URL+Extensions.swift */,
 				E5630D451E1E106100D9C53A /* URLRequest+Extensions.swift */,
+				E5630E011E1EEBF100D9C53A /* XML+Extensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -582,6 +585,7 @@
 				E5630D791E1E106100D9C53A /* PageCacheSession.swift in Sources */,
 				E5630D7B1E1E106100D9C53A /* PageManager.swift in Sources */,
 				E5630D7D1E1E106100D9C53A /* PageRequest.swift in Sources */,
+				E5630E021E1EEBF100D9C53A /* XML+Extensions.swift in Sources */,
 				E5630D811E1E106100D9C53A /* CachedURLResponsesPageSaver.swift in Sources */,
 				E5630D8B1E1E106100D9C53A /* WPSCache.swift in Sources */,
 				E5630D871E1E106100D9C53A /* PageSaverProtocol.swift in Sources */,
@@ -864,6 +868,7 @@
 				E5630D9B1E1E110C00D9C53A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		E5630DA61E1E113300D9C53A /* Build configuration list for PBXNativeTarget "CommonCrypto" */ = {
 			isa = XCConfigurationList;
@@ -872,6 +877,7 @@
 				E5630DA81E1E113300D9C53A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

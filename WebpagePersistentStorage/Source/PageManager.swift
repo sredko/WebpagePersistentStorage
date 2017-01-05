@@ -7,8 +7,6 @@
 //
 
 import Foundation
-import libxml2
-
 
 fileprivate let kIndexName = "webpage-index.plist"
 
@@ -84,13 +82,16 @@ public class PageManager {
         
         self.pageSaverFactory = PageSaverFactoryImpl(withStorageType: pageStorageType, localStorage: localStorage)
         self.responseProvider = CacheResponseProviderImpl()
-        xmlInitParser()
+
+        XMLSupport.initialize()
+        
         readIndex()
 
         WPSProtocol.register(true)
     }
 
     deinit {
+        XMLSupport.shutdown()
         WPSProtocol.register(false)
     }
 

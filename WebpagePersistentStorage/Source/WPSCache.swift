@@ -8,7 +8,7 @@
 
 import Foundation
 
-open class WPSCache: URLCache {
+class WPSCache: URLCache {
     
     // TODO: review: workaround to prevent ignoring of cache resposponse saving
     // this is the only change from system cache for now
