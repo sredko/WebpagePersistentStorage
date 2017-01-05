@@ -28,8 +28,6 @@
 		E5630DF31E1E441D00D9C53A /* PageURLViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PageURLViewController.swift; sourceTree = "<group>"; };
 		E5630DF41E1E441D00D9C53A /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		E5630DF91E1E447300D9C53A /* WebpagePersistentStorage.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebpagePersistentStorage.framework; path = "../../../../Library/Developer/Xcode/DerivedData/WebpagePersistentStorage-aojoykxjvppzqhbsznhuiiwcyoue/Build/Products/Debug-iphonesimulator/WebpagePersistentStorage.framework"; sourceTree = "<group>"; };
-		E5630DFC1E1E46BA00D9C53A /* libxml2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = libxml2.framework; path = "../../../../Library/Developer/Xcode/DerivedData/WebpagePersistentStorage-aojoykxjvppzqhbsznhuiiwcyoue/Build/Products/Debug-iphonesimulator/libxml2.framework"; sourceTree = "<group>"; };
-		E5630DFE1E1E46BE00D9C53A /* CommonCrypto.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CommonCrypto.framework; path = "../../../../Library/Developer/Xcode/DerivedData/WebpagePersistentStorage-aojoykxjvppzqhbsznhuiiwcyoue/Build/Products/Debug-iphonesimulator/CommonCrypto.framework"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -79,8 +77,6 @@
 		E5630DF81E1E447300D9C53A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				E5630DFE1E1E46BE00D9C53A /* CommonCrypto.framework */,
-				E5630DFC1E1E46BA00D9C53A /* libxml2.framework */,
 				E5630DF91E1E447300D9C53A /* WebpagePersistentStorage.framework */,
 			);
 			name = Frameworks;
@@ -285,8 +281,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = 28GAJ8X8U7;
-				HEADER_SEARCH_PATHS = "$(SDKROOT)/usr/include/libxml2";
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SDKROOT)/usr/include/libxml2",
+				);
 				INFOPLIST_FILE = WPSExampleApp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.serhiyredko.WPSExampleApp;
@@ -299,8 +297,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = 28GAJ8X8U7;
-				HEADER_SEARCH_PATHS = "$(SDKROOT)/usr/include/libxml2";
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SDKROOT)/usr/include/libxml2",
+				);
 				INFOPLIST_FILE = WPSExampleApp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.serhiyredko.WPSExampleApp;

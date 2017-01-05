@@ -13,10 +13,3 @@ SKIP_INSTALL = YES
 
 CURRENT_PROJECT_VERSION = 1
 VERSIONING_SYSTEM = apple-generic
-
-
-
-
-//DEBUG_INFORMATION_FORMAT = dwarf-with-dsym
-
-//PRODUCT_BUNDLE_IDENTIFIER = com.serhiyredko.CommonCrypto
