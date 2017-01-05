@@ -14,6 +14,8 @@ Pod::Spec.new do |s|
   
   s.xcconfig = {
     'SWIFT_INCLUDE_PATHS[sdk=iphoneos*]' => '$(SRCROOT)/WebpagePersistentStorage/Modules/libxml2/iphoneos $(SRCROOT)/WebpagePersistentStorage/Modules/CommonCrypto/iphoneos',
-    'SWIFT_INCLUDE_PATHS[sdk=iphonesimulator*]' => '$(SRCROOT)/WebpagePersistentStorage/Modules/libxml2/iphonesimulator $(SRCROOT)/WebpagePersistentStorage/Modules/CommonCrypto/iphonesimulator'
+    'SWIFT_INCLUDE_PATHS[sdk=iphonesimulator*]' => '$(SRCROOT)/WebpagePersistentStorage/Modules/libxml2/iphonesimulator $(SRCROOT)/WebpagePersistentStorage/Modules/CommonCrypto/iphonesimulator',
+    'HEADER_SEARCH_PATHS' => '$(SDKROOT)/usr/include/libxml2',
+	'OTHER_LDFLAGS' => '-lxml2'
    }
 end
