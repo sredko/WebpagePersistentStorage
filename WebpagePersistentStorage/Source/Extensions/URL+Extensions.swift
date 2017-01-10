@@ -10,13 +10,13 @@ import Foundation
 
 extension URL {
 
-    func wps_websiteURL() -> URL {
+    func wps_websiteURL() -> URL? {
     
         var result:URL?
         if let rootURL = URL(string:"/", relativeTo:self) {
             result = URL(string: rootURL.absoluteString.trimmingCharacters(in: CharacterSet(charactersIn:"/ ")))
         }
-        return result!
+        return result
     }
 
 

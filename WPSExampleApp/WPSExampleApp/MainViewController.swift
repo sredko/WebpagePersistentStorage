@@ -39,6 +39,16 @@ class MainViewController: UIViewController, UIWebViewDelegate {
         }
     }
 
+    func webView(_ webView: UIWebView, shouldStartLoadWith request: URLRequest, navigationType: UIWebViewNavigationType) -> Bool {
+
+        print("===========================")
+        print("= shouldStartLoadWith [\(navigationType.rawValue)]")
+        print("=             URL: \(request.url?.absoluteString)")
+        print("= mainDocumentURL: \(request.mainDocumentURL?.absoluteString)")
+        print("===========================")
+        return true
+    }
+
 
     func webViewDidStartLoad(_ webView: UIWebView) {
         print("Original delegate webViewDidStartLoad")

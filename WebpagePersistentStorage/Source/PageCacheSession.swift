@@ -94,7 +94,8 @@ internal class PageCacheSession : NSObject {
             DDLog("cachePage [\(url)]: page found in cache")
 
             // process HTML data
-            if let htmlDocument = MutableHTMLDocumentImpl(with: url.wps_websiteURL(), htmlData: htmlPageData, responseProvider: responseProvider) {
+            if  let websiteURL = url.wps_websiteURL(),
+                let htmlDocument = MutableHTMLDocumentImpl(with: websiteURL, htmlData: htmlPageData, responseProvider: responseProvider) {
                 
                 pageSaver.savePage(htmlDocument, { (error: Error?) -> (Void) in
                     reportCompletion(error)

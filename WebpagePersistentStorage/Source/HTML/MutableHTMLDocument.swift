@@ -181,7 +181,12 @@ class MutableHTMLDocumentImpl : MutableHTMLDocument {
 
             // in case we have cached response and it is css data
             // extract URLs from CSS content where they stored in url(...) or @import 'file'
-            process(CSSNode: node, contentURL: url, cachedResponse: cachedResponse, cssWebsiteURL: url.wps_websiteURL())
+            if let websiteURL = url.wps_websiteURL() {
+                process(CSSNode: node, contentURL: url, cachedResponse: cachedResponse, cssWebsiteURL: websiteURL)
+            }
+            else {
+                assert(false)
+            }
         }
         else {
             // process as regular node with URL as content
