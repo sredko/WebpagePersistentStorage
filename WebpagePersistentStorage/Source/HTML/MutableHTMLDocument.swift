@@ -61,14 +61,14 @@ class MutableHTMLDocumentImpl : MutableHTMLDocument {
         
         guard let xpathCtx = UnsafeMutablePointer<xmlXPathContext>(xmlXPathNewContext(xmlDoc)) else {
             DDLog("Failed create xpath context")
-            completion(WPSError.malformedHTMLDocument, nil)
+            completion(WPSError.malformedHTMLDocument.nsError(), nil)
             return
         }
         defer { xmlXPathFreeContext(xpathCtx) }
         
         guard let xpathObj = UnsafeMutablePointer<xmlXPathObject>(xmlXPathEvalExpression(kXpathExpr, xpathCtx)) else {
             DDLog("Failed evaluate xpath")
-            completion(WPSError.malformedHTMLDocument, nil)
+            completion(WPSError.malformedHTMLDocument.nsError(), nil)
             return
         }
         defer { xmlXPathFreeObject(xpathObj) }

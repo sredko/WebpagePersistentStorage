@@ -10,13 +10,6 @@ import Foundation
 
 fileprivate let kIndexName = "webpage-index.plist"
 
-public enum WPSError : Error  {
-    case requiredDataNotFoundInCache
-    case malformedHTMLDocument
-    case diskStorageFailure
-}
-
-
 public enum PageStorageType : Int {
 
     // [ this is default ]

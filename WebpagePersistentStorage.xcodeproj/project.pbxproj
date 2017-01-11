@@ -67,6 +67,7 @@
 		E5630DCB1E1E376E00D9C53A /* libxml2.h in Headers */ = {isa = PBXBuildFile; fileRef = E5630DCA1E1E376E00D9C53A /* libxml2.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		E5630DCD1E1E378000D9C53A /* CommonCrypto.h in Headers */ = {isa = PBXBuildFile; fileRef = E5630DCC1E1E378000D9C53A /* CommonCrypto.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		E5630E021E1EEBF100D9C53A /* XML+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5630E011E1EEBF100D9C53A /* XML+Extensions.swift */; };
+		E5FCE4C11E25FBEE00819EC8 /* WPSError.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5FCE4C01E25FBEE00819EC8 /* WPSError.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -146,6 +147,7 @@
 		E5630DD21E1E3AB400D9C53A /* WebpagePersistentStorage.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = WebpagePersistentStorage.xcconfig; sourceTree = "<group>"; };
 		E5630DD31E1E3EC000D9C53A /* WebpagePersistentStorageTests.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = WebpagePersistentStorageTests.xcconfig; sourceTree = "<group>"; };
 		E5630E011E1EEBF100D9C53A /* XML+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "XML+Extensions.swift"; sourceTree = "<group>"; };
+		E5FCE4C01E25FBEE00819EC8 /* WPSError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WPSError.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -239,6 +241,7 @@
 				E5630D3D1E1E106100D9C53A /* CacheResponseProvider.swift */,
 				E5630D591E1E106100D9C53A /* WPSCache.swift */,
 				E5630D5A1E1E106100D9C53A /* WPSProtocol.swift */,
+				E5FCE4C01E25FBEE00819EC8 /* WPSError.swift */,
 			);
 			path = Source;
 			sourceTree = "<group>";
@@ -580,6 +583,7 @@
 				E5630D6B1E1E106100D9C53A /* CSSURLExtractor.swift in Sources */,
 				E5630D711E1E106100D9C53A /* MutableHTMLDocument.swift in Sources */,
 				E5630D671E1E106100D9C53A /* URL+Extensions.swift in Sources */,
+				E5FCE4C11E25FBEE00819EC8 /* WPSError.swift in Sources */,
 				E5630D6D1E1E106100D9C53A /* CSSURLOwnedNode.swift in Sources */,
 				E5630D8D1E1E106100D9C53A /* WPSProtocol.swift in Sources */,
 				E5630D791E1E106100D9C53A /* PageCacheSession.swift in Sources */,

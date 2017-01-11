@@ -102,12 +102,12 @@ internal class PageCacheSession : NSObject {
                 })
             }
             else {
-                reportCompletion(WPSError.malformedHTMLDocument)
+                reportCompletion(WPSError.malformedHTMLDocument.nsError())
             }
         }
         else {
             DDLog("cachePage [\(url)]: not in cache")
-            reportCompletion(WPSError.requiredDataNotFoundInCache)
+            reportCompletion(WPSError.requiredDataNotFoundInCache.nsError())
         }
     }
 

@@ -22,14 +22,14 @@ class CachedURLResponsesPageSaver : PageSaverBase {
     
         guard let cachedResponse = primaryCachedResponse else {
             assert(false)
-            completion(WPSError.requiredDataNotFoundInCache)
+            completion(WPSError.requiredDataNotFoundInCache.nsError())
             return
         }
     
         // save initial response in sdk local cache
         if !storage.storeCachedResponse(cachedResponse, for: URLRequest(url: url)) {
             print("Failed to save page main response in local cache")
-            completion(WPSError.diskStorageFailure)
+            completion(WPSError.diskStorageFailure.nsError())
             return
         }
 
