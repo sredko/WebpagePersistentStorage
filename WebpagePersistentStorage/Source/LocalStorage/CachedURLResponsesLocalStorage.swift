@@ -8,13 +8,14 @@
 
 import Foundation
 
-
-
 class CachedURLResponsesLocalStorage : LocalStorage {
 
     fileprivate let searchPathDirectory: FileManager.SearchPathDirectory
     fileprivate let path: String
     fileprivate var storageBaseURL: URL?
+    fileprivate let queue = DispatchQueue(label: "WebpagePersistentStorage.CachedURLResponsesLocalStorage")
+    fileprivate let fileManager = FileManager()
+    
 
     init(path: String?, searchPathDirectory: FileManager.SearchPathDirectory) {
         self.path = path ?? "webCache/"
@@ -24,9 +25,10 @@ class CachedURLResponsesLocalStorage : LocalStorage {
     func storeCachedResponse(_ cachedResponse: CachedURLResponse, for request: URLRequest) -> Bool {
         var result = false
 
-        //TODO: review for race conditions its not on main
         if let hash = request.wps_MD5() {
-            result = save(cachedResponse, hash)
+            queue.sync {
+                result = save(cachedResponse, hash)
+            }
         }
 
         DDLog("LocalStorage stored [\(result)]: \(request.wps_urlAbsoluteString)")
@@ -37,9 +39,10 @@ class CachedURLResponsesLocalStorage : LocalStorage {
     func cachedResponse(for request: URLRequest) -> CachedURLResponse? {
         var result: CachedURLResponse?
         
-        //TODO: review for race conditions its not on main
         if let path = filePathURL(for: request)?.path {
-            result = NSKeyedUnarchiver.unarchiveObject(withFile: path) as? CachedURLResponse
+            queue.sync {
+                result = NSKeyedUnarchiver.unarchiveObject(withFile: path) as? CachedURLResponse
+            }
         }
 
         DDLog("LocalStorage retrieved [\(result)]: \(request.wps_urlAbsoluteString)")
@@ -49,6 +52,10 @@ class CachedURLResponsesLocalStorage : LocalStorage {
 
     fileprivate func save(_ object: NSCoding, _ hash: String) -> Bool {
 
+        if #available(iOS 10.0, *) {
+            dispatchPrecondition(condition: .onQueue(queue))
+        }
+        
         var result = false
         if  let path = filePathURL(forRequestHash: hash)?.path {
             let data = NSKeyedArchiver.archivedData(withRootObject: object)
@@ -88,13 +95,15 @@ class CachedURLResponsesLocalStorage : LocalStorage {
             return storageBaseURL
         }
 
-        if  let baseURL = try? FileManager.default.url(for: searchPathDirectory,
+        if  let baseURL = try? fileManager.url(for: searchPathDirectory,
                 in: .userDomainMask, appropriateFor: nil, create: false),
             let fileURL = URL(string: path, relativeTo: baseURL) {
             var isDir: ObjCBool = false
-            if !FileManager.default.fileExists(atPath: fileURL.absoluteString, isDirectory: &isDir) {
+            if !fileManager.fileExists(atPath: fileURL.path, isDirectory: &isDir) {
                 do {
-                    try FileManager.default.createDirectory(at: fileURL, withIntermediateDirectories: true, attributes: nil)
+                    try fileManager.createDirectory(at: fileURL, withIntermediateDirectories: true, attributes: nil)
+                    let status = fileURL.wps_addSkipBackupAttribute()
+                    assert(status)
                 } catch {
                     print("Error creating directory at URL: \(fileURL)")
                 }
@@ -112,11 +121,13 @@ class CachedURLResponsesLocalStorage : LocalStorage {
         if  let hash = url.wps_MD5(),
             let baseURL = storageURL() {
             if let fileURL = URL(string: hash, relativeTo: baseURL) {
-                do {
-                    try FileManager.default.removeItem(at: fileURL)
-                    result = true
-                } catch {
-                    print("remove responseForURL [\(error)]: \(url)")
+                queue.sync {
+                    do {
+                        try fileManager.removeItem(at: fileURL)
+                        result = true
+                    } catch {
+                        print("remove responseForURL [\(error)]: \(url)")
+                    }
                 }
             }
         }
@@ -128,11 +139,13 @@ class CachedURLResponsesLocalStorage : LocalStorage {
     func clear() {
 
         if let url = storageURL() {
-            do {
-                try FileManager.default.removeItem(at: url)
-                storageBaseURL = nil
-            } catch {
-                print("Error clearCache [\(error)]: \(url)")
+            queue.sync {
+                do {
+                    try fileManager.removeItem(at: url)
+                    storageBaseURL = nil
+                } catch {
+                    print("Error clearCache [\(error)]: \(url)")
+                }
             }
         }
     }

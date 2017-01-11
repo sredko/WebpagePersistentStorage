@@ -41,7 +41,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             return !self.reachabilityReportsOnline
         }
         
-        WebpagePersistentStorage.PageManager.makeSharedInstance(isOfflineHandler)
+        let config = PageManager.Config(isOfflineHandler:isOfflineHandler,
+            pageStorageType: nil, cacheMemoryCapacityMB: nil, cacheDiskCapacityMB: nil, cacheDiskPath: nil)
+        PageManager.makeSharedInstance(withConfig: config)
         
         return true
     }

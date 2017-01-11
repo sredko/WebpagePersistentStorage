@@ -38,20 +38,39 @@ public class PageManager {
 
     public static var shared: PageManager!
 
-    public static func makeSharedInstance(_ isOfflineHandler: @escaping (() -> (Bool)), pageStorageType: PageStorageType = .storePageAsCachedURLResponses) {
+    // for missing value default will be used
+    public typealias Config = (
+        isOfflineHandler:(() -> (Bool)),
+        pageStorageType: PageStorageType?,
+        cacheMemoryCapacityMB: Int?,
+        cacheDiskCapacityMB: Int?,
+        cacheDiskPath: String?)
+
+    public static func makeSharedInstance(withConfig config: Config) {
 
         if nil == shared {
-        
-            shared = PageManager(isOfflineHandler, pageStorageType: pageStorageType)
+
+            let pageStorageType = config.pageStorageType ?? .storePageAsCachedURLResponses
+
+            let localStorage = CachedURLResponsesLocalStorage(path: nil, searchPathDirectory: .documentDirectory)
+            let pageSaverFactory = PageSaverFactoryImpl(withStorageType: pageStorageType, localStorage: localStorage)
+            let responseProvider = CacheResponseProviderImpl()
+
+            shared = PageManager(config.isOfflineHandler,
+                pageStorageType: pageStorageType,
+                localStorage: localStorage,
+                pageSaverFactory: pageSaverFactory,
+                responseProvider: responseProvider)
 
             let Mb = 1024 * 1024
             
             // have not switched to system yet  becasue it doesn't cache some major requests
             // without hacks, see overriden diskCapacity of WPSCache
-            // Foundation.URLCache.shared = Foundation.URLCache(memoryCapacity: 30 * MB, diskCapacity: 150 * MB, diskPath: nil)
+            let memoryCapacity = (config.cacheMemoryCapacityMB ?? 30) * Mb
+            let diskCapacity = (config.cacheDiskCapacityMB ?? 150) * Mb
+            let diskPath = config.cacheDiskPath
 
-            // do we need this cache at all?
-            let urlCache = WPSCache(memoryCapacity: 30 * Mb, diskCapacity: 150 * Mb, diskPath: nil)
+            let urlCache = WPSCache(memoryCapacity: memoryCapacity, diskCapacity: diskCapacity, diskPath: diskPath)
             Foundation.URLCache.shared = urlCache
         }
         else {
@@ -63,30 +82,27 @@ public class PageManager {
     internal let pageStorageType: PageStorageType
 
     internal let isOfflineHandler: () -> (Bool)
-    
-    internal let sessionManager = CacheSessionManager()
-    
-    internal var pages = Set<URL>()
-    
+
     internal var localStorage: LocalStorage
     
     internal let pageSaverFactory: PageSaverFactory
     
     internal let responseProvider: CacheResponseProvider
 
-    private init(_ isOfflineHandler: @escaping (() -> (Bool)), pageStorageType: PageStorageType) {
+    internal let sessionManager = CacheSessionManager()
+    
+    internal var pages = Set<URL>()
+    
+    fileprivate init(_ isOfflineHandler: @escaping (() -> (Bool)), pageStorageType: PageStorageType, localStorage: LocalStorage, pageSaverFactory: PageSaverFactory, responseProvider: CacheResponseProvider) {
+
         self.isOfflineHandler = isOfflineHandler
         self.pageStorageType = pageStorageType
-        
-        self.localStorage = CachedURLResponsesLocalStorage(path: nil, searchPathDirectory: .documentDirectory)
-        
-        self.pageSaverFactory = PageSaverFactoryImpl(withStorageType: pageStorageType, localStorage: localStorage)
-        self.responseProvider = CacheResponseProviderImpl()
+        self.localStorage = localStorage
+        self.pageSaverFactory = pageSaverFactory
+        self.responseProvider = responseProvider
 
         XMLSupport.initialize()
-        
         readIndex()
-
         WPSProtocol.register(true)
     }
 
@@ -136,7 +152,11 @@ extension PageManager {
     internal func saveIndex() {
         do {
             let indexURL = try PageManager.indexURL()
-            if !NSKeyedArchiver.archiveRootObject(pages, toFile: indexURL.path) {
+            if NSKeyedArchiver.archiveRootObject(pages, toFile: indexURL.path) {
+                let status = indexURL.wps_addSkipBackupAttribute()
+                assert(status)
+            }
+            else {
                 print("Failed save web cache index: \(indexURL)")
             }
         } catch {

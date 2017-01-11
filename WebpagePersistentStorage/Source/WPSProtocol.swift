@@ -14,7 +14,7 @@ import Foundation
 class WPSProtocol: URLProtocol {
 
     class func register(_ shouldRegister: Bool) {
-        DDLog("Protocol register:\(shouldRegister)")
+        DDLog("WPSProtocol register:\(shouldRegister)")
         if shouldRegister {
             registerClass(self)
         } else {
@@ -32,8 +32,8 @@ class WPSProtocol: URLProtocol {
 
     lazy var session: URLSession = {
         let configuration = URLSession.shared.configuration
-        // TODO: review see comment below in startLoading()
-        // configuration.timeoutIntervalForRequest = 1.0
+        // let attempt to load data presumably being offline with small timeout
+        configuration.timeoutIntervalForRequest = 10.0
         return Foundation.URLSession(configuration: configuration, delegate: self, delegateQueue: nil)
     }()
 
@@ -48,12 +48,12 @@ class WPSProtocol: URLProtocol {
         }
 
         let isOffline = self.isOffline()
-        DDLog("Protocol \(isOffline ? "" : "NOT") accepted: \(request.wps_urlAbsoluteString)")
+        DDLog("WPSProtocol \(isOffline ? "" : "NOT") accepted: \(request.wps_urlAbsoluteString)")
         return isOffline
     }
 
     override init(request: URLRequest, cachedResponse: CachedURLResponse?, client: URLProtocolClient?) {
-        DDLog("Protocol create: \(request.wps_urlAbsoluteString), cachedResponse: \(cachedResponse)")
+        DDLog("WPSProtocol create: \(request.wps_urlAbsoluteString), cachedResponse: \(cachedResponse)")
         super.init(request: request, cachedResponse: cachedResponse, client: client)
     }
 
@@ -64,7 +64,7 @@ class WPSProtocol: URLProtocol {
     // MARK:-
     override func startLoading() {
 
-        DDLog("Protocol startLoading: \(request.wps_urlAbsoluteString)")
+        DDLog("WPSProtocol startLoading: \(request.wps_urlAbsoluteString)")
 
         // try to get cached response from system/sdk local storage
         var cachedResponseToUse = cachedResponse
@@ -86,29 +86,30 @@ class WPSProtocol: URLProtocol {
 
         // in case cached response found mark it as valid for usage
         if let cachedResponse = cachedResponseToUse {
-            DDLog("Protocol: found cachedResponse for \(request.wps_urlAbsoluteString)")
+            DDLog("WPSProtocol: found cachedResponse for \(request.wps_urlAbsoluteString)")
             client?.urlProtocol(self, cachedResponseIsValid: cachedResponse)
             return
         }
 
         // no cached response found and this code supposed to work for offline mode
         // currently in case reachability handler reports no connection just give up an report error. 
-        // TODO: review logic and don't make pre-flight assumptions, but always try to perform network requests with dataTask. Currently observing issues for iOS 10.x simulator only(?) that leads to 60 sec timeouts for non important requests that bloack whole view rendering. Session configuration can be set to have timeput 1 sec instead of 60 or so if need (see TODO above)
-        DDLog("Protocol: no cache found, load: \(request.wps_urlAbsoluteString)")
-        let isOffline = WPSProtocol.isOffline()
-        if isOffline {
-            // this is workaround, review it, no pre-flight checks should be performed
-            client?.urlProtocol(self, didFailWithError: NSError(domain: NSURLErrorDomain, code: NSURLErrorTimedOut, userInfo: nil))
-        }
-        else {
+        // The logic is don't make pre-flight assumptions, but always try to perform network requests with dataTask. Currently observing issues for iOS 10.x simulator only(?) that leads to 60 sec timeouts for non important requests that block whole view rendering. Session configuration  set to have timeout 10 sec instead of 60
+        DDLog("WPSProtocol: no cache found, load: \(request.wps_urlAbsoluteString)")
+
+        // let isOffline = WPSProtocol.isOffline()
+        // if isOffline {
+        //    // this is workaround, review it, no pre-flight checks should be performed
+        //    client?.urlProtocol(self, didFailWithError: NSError(domain: NSURLErrorDomain, code: NSURLErrorTimedOut, userInfo: nil))
+        //}
+        //else {
             // this should be correct way to go
             dataTask = session.dataTask(with: request)
             dataTask?.resume()
-        }
+        //}
     }
 
     override func stopLoading() {
-        DDLog("Protocol: stopLoading: \(request.wps_urlAbsoluteString)")
+        DDLog("WPSProtocol: stopLoading: \(request.wps_urlAbsoluteString)")
         dataTask?.cancel()
         dataTask = nil
     }
@@ -129,7 +130,7 @@ extension WPSProtocol: URLSessionDataDelegate {
     }
 
     func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: Error?) {
-        DDLog("Protocol error: \(error)")
+        DDLog("WPSProtocol error: \(error)")
         if let error = error {
             client?.urlProtocol(self, didFailWithError: error)
         } else {
