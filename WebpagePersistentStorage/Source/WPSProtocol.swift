@@ -22,10 +22,18 @@ class WPSProtocol: URLProtocol {
         }
     }
     
-    fileprivate class func isOffline() -> Bool {
+    fileprivate class func shouldLoad(_ request: URLRequest) -> Bool {
         var result = false
-        if let pageManager = PageManager.shared {
-            result = pageManager.isOfflineHandler()
+        if  let pageManager = PageManager.shared,
+            let url = request.url {
+    
+            // ideally would be to use hasCacheSession(for: url), but now
+            // consider that WPSProtocol shoud not handle anything at time 
+            // when caching session is running since we assume network is ok
+            // and if it is not a true error will be reported during page cache
+            if !pageManager.sessionManager.hasRunningSessions() { 
+                result = pageManager.isOfflineHandler()
+            }
         }
         return result
     }
@@ -47,9 +55,9 @@ class WPSProtocol: URLProtocol {
             return false
         }
 
-        let isOffline = self.isOffline()
-        DDLog("WPSProtocol \(isOffline ? "" : "NOT") accepted: \(request.wps_urlAbsoluteString)")
-        return isOffline
+        let shouldLoad = self.shouldLoad(request)
+        DDLog("WPSProtocol \(shouldLoad ? "" : "NOT") handled: \(request.wps_urlAbsoluteString)")
+        return shouldLoad
     }
 
     override init(request: URLRequest, cachedResponse: CachedURLResponse?, client: URLProtocolClient?) {

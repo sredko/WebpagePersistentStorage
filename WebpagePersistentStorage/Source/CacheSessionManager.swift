@@ -41,5 +41,14 @@ internal class CacheSessionManager {
         sessions.append(result)
         return result
     }
+
+    func hasRunningSessions() -> Bool {
+        return sessions.count > 0
+    }
     
+    func hasSession(for url: URL) -> Bool {
+        assert(false) // not implemented
+        return false
+    }
+
 }
