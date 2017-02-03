@@ -8,10 +8,13 @@
 
 import Foundation
 
+typealias LocalStorageCompletion = (_ error: Error?) -> Void
 
 protocol LocalStorage {
 
     func storeCachedResponse(_ cachedResponse: CachedURLResponse, for request: URLRequest) -> Bool
+    
+    func storeCachedResponses(_ cachedResponses: [CachedURLResponse], _ completion: @escaping LocalStorageCompletion)
 
     func cachedResponse(for request: URLRequest) -> CachedURLResponse?
 

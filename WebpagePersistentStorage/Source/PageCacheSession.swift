@@ -29,6 +29,13 @@ internal class PageCacheSession : NSObject {
     internal var state: State = .created
 
     internal var completionHandler: Completion?
+
+    // Cached responses associated with session
+    internal var associatedResponses = [String: CachedURLResponse]()
+
+    // cached URL strings of all request's.mainDocumentURL
+    fileprivate var associatedDocumentAccess = SyncAccess()
+    fileprivate var associatedDocumentURLStrings = Set<String>()
     
     internal init(with pageRequest: PageRequest, responseProvider: CacheResponseProvider,  pageSaverFactory: PageSaverFactory, completionHandler: @escaping Completion) {
         self.pageRequest = pageRequest
@@ -40,14 +47,13 @@ internal class PageCacheSession : NSObject {
     internal var originalWebViewDelegate: UIWebViewDelegate?
     
     func start() {
-
+    
         assert(Thread.isMainThread)
         assert(state == .created)
         state = .running
         
         var shouldLoadWebView = true
         if pageRequest.options.contains(.preferUsageCacheOverNetwork) {
-            //TODO check that we really have needed items in cache ...
             shouldLoadWebView = false
         }
         
@@ -97,8 +103,9 @@ internal class PageCacheSession : NSObject {
             if  let websiteURL = url.wps_websiteURL(),
                 let htmlDocument = MutableHTMLDocumentImpl(with: websiteURL, htmlData: htmlPageData, responseProvider: responseProvider) {
                 
+                pageSaver.associatedResponses = associatedResponses
                 pageSaver.savePage(htmlDocument, { (error: Error?) -> (Void) in
-                    reportCompletion(error)
+                    self.reportCompletion(error)
                 })
             }
             else {
@@ -115,8 +122,34 @@ internal class PageCacheSession : NSObject {
 
         DDLog("End caching of page with URL: [\(pageRequest.url)]")
         state = .completed
-        if let completionHandler = completionHandler {
-            completionHandler(self, error)
+        DispatchQueue.main.async {
+            if let completionHandler = self.completionHandler {
+                completionHandler(self, error)
+            }
+        }
+    }
+    
+    internal func registerIfRelated(_ response: CachedURLResponse, for request: URLRequest) {
+
+        DDLog("registerIfRelated: resp: \(response.wps_url?.wps_normalizedURLString()), request \(request.url?.wps_normalizedURLString()) main_Doc: \(request.mainDocumentURL?.wps_normalizedURLString()) ")
+
+        if let responseURLString = response.wps_url?.wps_normalizedURLString(),
+           let requestURLString = request.url?.wps_normalizedURLString() {
+           
+            assert(responseURLString == requestURLString)
+            
+            if let requestMainDocURLString = request.mainDocumentURL?.wps_normalizedURLString(),
+                associatedDocumentAccess.immutable ({ associatedDocumentURLStrings.contains(requestMainDocURLString)}) {
+
+                associatedResponses[responseURLString] = response
+            }
+            else {
+                // for debug only since work for single running session only
+                assert(false)
+            }
+        }
+        else {
+            assert(false)
         }
     }
 }
@@ -185,11 +218,17 @@ extension PageCacheSession : UIWebViewDelegate {
         assert(Thread.isMainThread)
         assert(state == .running)
 
-        DDLog("shouldStartLoadWith: \(request.wps_urlAbsoluteString)")
-
         // ignore some URLs
         if request.url?.absoluteString == "about:blank" {
             return false
+        }
+
+        DDLog("shouldStartLoadWith: \(request.wps_urlAbsoluteString) mainDocURL: \(request.mainDocumentURL?.wps_normalizedURLString())")
+        
+        if let urlString = request.mainDocumentURL?.wps_normalizedURLString() {
+            associatedDocumentAccess.mutable {
+                associatedDocumentURLStrings.insert(urlString)
+            }
         }
 
         if let originalDelegate = originalWebViewDelegate {

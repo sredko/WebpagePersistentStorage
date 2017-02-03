@@ -16,7 +16,9 @@ internal protocol PageSaverProtocol {
     
     var htmlPageData: Data? { get }
 
-    func savePage(_ htmlDocument: MutableHTMLDocument, _ completion: PageSaveCompletion)
+    var associatedResponses: [String: CachedURLResponse] { get set }
+
+    func savePage(_ htmlDocument: MutableHTMLDocument, _ completion: @escaping PageSaveCompletion)
 }
 
 
@@ -24,6 +26,7 @@ internal class PageSaverBase: PageSaverProtocol {
 
     let url: URL
     let pageResponse: CachedURLResponse?
+    var associatedResponses = [String: CachedURLResponse]()
     private var processedHTMLResponse: CachedURLResponse?
 
     init(_ url: URL, pageResponse: CachedURLResponse?) {
@@ -57,8 +60,43 @@ internal class PageSaverBase: PageSaverProtocol {
         return primaryCachedResponse?.data
     }
 
-    func savePage(_ htmlDocument: MutableHTMLDocument, _ completion: PageSaveCompletion) {
+    func savePage(_ htmlDocument: MutableHTMLDocument, _ completion: @escaping PageSaveCompletion) {
         assert (false)
     }
 
 }
+
+// WARNING: potential memeory pressure on big pages
+// Internal auxilary extension to act as localStorage to accumulate all associated
+// responses and futher save at once, to avoid duplicates as captured
+// during session web view load and read from CSS. 
+extension PageSaverBase : LocalStorage {
+
+    func storeCachedResponse(_ cachedResponse: CachedURLResponse, for request: URLRequest) -> Bool {
+        
+        if let requestURLString = request.url?.wps_normalizedURLString() {
+            associatedResponses[requestURLString] = cachedResponse
+        }
+
+        return true
+    }
+
+    func storeCachedResponses(_ cachedResponses: [CachedURLResponse], _ completion: @escaping LocalStorageCompletion) {
+        assert(false)
+    }
+
+    func cachedResponse(for request: URLRequest) -> CachedURLResponse? {
+        assert(false)
+        return nil
+    }
+
+    func clear() {
+        assert(false)
+    }
+    
+    func remove(responseForURL url: URL) -> Bool {
+        assert(false)
+        return false
+    }
+}
+

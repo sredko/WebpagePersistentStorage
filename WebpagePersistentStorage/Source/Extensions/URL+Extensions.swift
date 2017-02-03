@@ -10,11 +10,24 @@ import Foundation
 
 extension URL {
 
+    func wps_normalizedURLString() -> String {
+
+        let result = absoluteString.trimmingCharacters(in: CharacterSet(charactersIn:"/ "))
+        return result
+    }
+
+    func wps_normalizedURL() -> URL? {
+
+        let result = URL(string: wps_normalizedURLString())
+        return result
+    }
+
+
     func wps_websiteURL() -> URL? {
     
         var result:URL?
-        if let rootURL = URL(string:"/", relativeTo:self) {
-            result = URL(string: rootURL.absoluteString.trimmingCharacters(in: CharacterSet(charactersIn:"/ ")))
+        if  let rootURL = URL(string:"/", relativeTo:self) {
+            result = rootURL.wps_normalizedURL()
         }
         return result
     }
@@ -35,11 +48,11 @@ extension URL {
     }
 
     func wps_MD5() -> String? {
-        return absoluteString.trimmingCharacters(in: CharacterSet(charactersIn:"/ ")).wps_MD5()
+        return wps_normalizedURLString().wps_MD5()
     }
     
-    func wps_addSkipBackupAttribute() -> Bool
-    {
+    func wps_addSkipBackupAttribute() -> Bool {
+
         guard isFileURL else {
             assert(false)
             return false

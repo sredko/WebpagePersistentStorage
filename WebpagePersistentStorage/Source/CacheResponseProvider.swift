@@ -20,8 +20,13 @@ class CacheResponseProviderImpl: CacheResponseProvider {
 
     func cachedResponse(for url:URL) -> CachedURLResponse? {
         let request = NSURLRequest(url: url)
-        let cachedResponse = Foundation.URLCache.shared.cachedResponse(for: request as URLRequest)
-        return cachedResponse
+        
+        if let wpsCache = Foundation.URLCache.shared as? WPSCache {
+            let cachedResponse = wpsCache.getSessionCachedResponse(for:request as URLRequest)
+            return cachedResponse
+        }
+        
+        return nil
     }
 }
 
