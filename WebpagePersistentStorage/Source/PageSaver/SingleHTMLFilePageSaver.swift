@@ -11,7 +11,7 @@ import Foundation
 
 class SingleHTMLFilePageSaver : PageSaverBase {
 
-    override func savePage(_ htmlDocument: MutableHTMLDocument, _ completion: PageSaveCompletion) {
+    override func savePage(_ htmlDocument: MutableHTMLDocument, _ completion: @escaping PageSaveCompletion) {
     
         htmlDocument.getURLOwnedNodes { (_ error: Error?, nodes: [URLOwnedNode]?) in
             if let urlOwnedNodes = nodes {

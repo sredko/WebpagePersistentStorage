@@ -11,7 +11,7 @@ import Foundation
 
 class LocalFilesPageSaver : PageSaverBase {
 
-    override func savePage(_ htmlDocument: MutableHTMLDocument, _ completion: PageSaveCompletion) {
+    override func savePage(_ htmlDocument: MutableHTMLDocument, _ completion: @escaping PageSaveCompletion) {
         
         // NOT implemented
         assert(false)

@@ -36,6 +36,11 @@ internal class CacheSessionManager {
             
             // and call original completion closure
             completion(session, error)
+            
+            if  0 == self.sessions.count,
+                let wpsCache = Foundation.URLCache.shared as? WPSCache {
+                wpsCache.clearTransientCache()
+            }
         }
 
         sessions.append(result)
@@ -46,9 +51,11 @@ internal class CacheSessionManager {
         return sessions.count > 0
     }
     
-    func hasSession(for url: URL) -> Bool {
-        assert(false) // not implemented
-        return false
+    func registerIfRelated(_ response:CachedURLResponse, for request: URLRequest) {
+
+        sessions.forEach { (session: PageCacheSession) in
+            session.registerIfRelated(response, for: request)
+        }
     }
 
 }

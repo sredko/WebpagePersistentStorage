@@ -35,6 +35,25 @@ class CachedURLResponsesLocalStorage : LocalStorage {
         return result
     }
     
+    func storeCachedResponses(_ cachedResponses: [CachedURLResponse], _ completion: @escaping LocalStorageCompletion) {
+
+        queue.async {
+
+            var error: NSError?
+            cachedResponses.forEach({ (cachedResponse: CachedURLResponse) in
+                if let hash = cachedResponse.wps_url?.wps_MD5() {
+                    if !self.save(cachedResponse, hash) {
+                        error = WPSError.diskStorageFailure.nsError()
+                    }
+                }
+                else {
+                    assert(false)
+                }
+            })
+            
+            completion(error)
+        }
+    }
 
     func cachedResponse(for request: URLRequest) -> CachedURLResponse? {
         var result: CachedURLResponse?

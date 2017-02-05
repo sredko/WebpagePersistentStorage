@@ -102,17 +102,13 @@ class URLTableViewCell : UITableViewCell {
 
 
     func loadPage(savePersistently: Bool) {
-    
-        let requestCompletedHandler =  { (_ request: PageRequest) -> (Bool) in
-            let documentState = request.webView.stringByEvaluatingJavaScript(from: "document.readyState")
-            return documentState == "complete"
-        }
         
         activityIndicator.startAnimating()
         
         let options: PageRequest.Options = savePersistently ? [] : [.dontSavePagePersistently]
+        //let options: PageRequest.Options =  [.useRenderedByWebViewHTML]
         
-        let pageRequest = PageRequest(with: url!, options: options, webView: nil, completedHandler: requestCompletedHandler)
+        let pageRequest = PageRequest(with: url!, options: options)
         pageRequest.start(completion: { (result: PageRequest.Result) -> (Void) in
 
             self.activityIndicator.stopAnimating()
@@ -126,7 +122,9 @@ class URLTableViewCell : UITableViewCell {
                 case .failed(let error):
                     print("Request error: \(error)")
                     
-                    let alertController = UIAlertController(title: "Error", message: "\(error)", preferredStyle: .alert)
+                    let nsError = error as NSError?
+                    
+                    let alertController = UIAlertController(title: "Error", message: "\(nsError!)", preferredStyle: .alert)
                     alertController.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
                     UIApplication.shared.windows[0].rootViewController?.present(alertController, animated: true, completion: nil)
                     

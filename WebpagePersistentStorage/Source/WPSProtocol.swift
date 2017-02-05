@@ -24,8 +24,7 @@ class WPSProtocol: URLProtocol {
     
     fileprivate class func shouldLoad(_ request: URLRequest) -> Bool {
         var result = false
-        if  let pageManager = PageManager.shared,
-            let url = request.url {
+        if  let pageManager = PageManager.shared {
     
             // ideally would be to use hasCacheSession(for: url), but now
             // consider that WPSProtocol shoud not handle anything at time 
@@ -104,16 +103,17 @@ class WPSProtocol: URLProtocol {
         // The logic is don't make pre-flight assumptions, but always try to perform network requests with dataTask. Currently observing issues for iOS 10.x simulator only(?) that leads to 60 sec timeouts for non important requests that block whole view rendering. Session configuration  set to have timeout 10 sec instead of 60
         DDLog("WPSProtocol: no cache found, load: \(request.wps_urlAbsoluteString)")
 
-        // let isOffline = WPSProtocol.isOffline()
-        // if isOffline {
-        //    // this is workaround, review it, no pre-flight checks should be performed
-        //    client?.urlProtocol(self, didFailWithError: NSError(domain: NSURLErrorDomain, code: NSURLErrorTimedOut, userInfo: nil))
-        //}
-        //else {
+// remmed code below help avoid timeout issue on simulator
+//        let shouldLoad = WPSProtocol.shouldLoad(request)
+//        if shouldLoad {
+//            // this is workaround, review it, no pre-flight checks should be performed
+//            client?.urlProtocol(self, didFailWithError: NSError(domain: NSURLErrorDomain, code: NSURLErrorTimedOut, userInfo: nil))
+//        }
+//        else {
             // this should be correct way to go
             dataTask = session.dataTask(with: request)
             dataTask?.resume()
-        //}
+//        }
     }
 
     override func stopLoading() {

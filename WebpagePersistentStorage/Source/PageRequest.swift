@@ -28,6 +28,10 @@ public struct PageRequest {
     }
 
     public typealias CompletedHandler = (_ request: PageRequest) -> (Bool)
+    public static let defaultRequestCompletedHandler: CompletedHandler =  { (_ request: PageRequest) -> (Bool) in
+            let documentState = request.webView.stringByEvaluatingJavaScript(from: "document.readyState")
+            return documentState == "complete"
+        }
 
     public let url: URL
 
@@ -37,7 +41,7 @@ public struct PageRequest {
     
     public let completedHandler: CompletedHandler?
     
-    public init(with url: URL, options: Options = [], webView: UIWebView? = nil, completedHandler: CompletedHandler?) {
+    public init(with url: URL, options: Options = [], webView: UIWebView? = nil, completedHandler: CompletedHandler? = PageRequest.defaultRequestCompletedHandler) {
         self.url = url
         self.options = options
         self.webView = webView ?? UIWebView()
@@ -48,7 +52,9 @@ public struct PageRequest {
 
 extension PageRequest {
 
-    internal var urlRequest: URLRequest { return URLRequest(url: url) }
+    internal var urlRequest: URLRequest {
+        return URLRequest(url: url, cachePolicy:.reloadIgnoringLocalCacheData)
+    }
     
     internal var shouldStorePersistently: Bool { return !options.contains(.dontSavePagePersistently) }
     
