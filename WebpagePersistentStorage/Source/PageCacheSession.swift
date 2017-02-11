@@ -131,7 +131,7 @@ internal class PageCacheSession : NSObject {
     
     internal func registerIfRelated(_ response: CachedURLResponse, for request: URLRequest) {
 
-        DDLog("registerIfRelated: resp: \(response.wps_url?.wps_normalizedURLString()), request \(request.url?.wps_normalizedURLString()) main_Doc: \(request.mainDocumentURL?.wps_normalizedURLString()) ")
+        DDLog("registerIfRelated: resp: \(response.wps_url?.wps_normalizedURLString()), request \(request.url?.wps_normalizedURLString()) mainDoc: \(request.mainDocumentURL?.wps_normalizedURLString()) ")
 
         if let responseURLString = response.wps_url?.wps_normalizedURLString(),
            let requestURLString = request.url?.wps_normalizedURLString() {
@@ -144,8 +144,10 @@ internal class PageCacheSession : NSObject {
                 associatedResponses[responseURLString] = response
             }
             else {
-                // for debug only since work for single running session only
-                assert(false)
+                // In case of loading of two pages with the same referenced URLs requests from 
+                // previous (mainDocumentURL) can be returned by cache for second page,
+                // we just ignore it for now, since no issues observed and cached responses
+                // are in cache. Otherwise we might need to check not mainDocURLs, but their hosts
             }
         }
         else {
