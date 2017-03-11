@@ -29,6 +29,8 @@ internal class PageCacheSession : NSObject {
     internal var state: State = .created
 
     internal var completionHandler: Completion?
+    
+    fileprivate var loadRequestCounter: Int = 0
 
     // Cached responses associated with session
     internal var associatedResponses = [String: CachedURLResponse]()
@@ -59,6 +61,7 @@ internal class PageCacheSession : NSObject {
         
         if shouldLoadWebView {
             // load web view to have needed external data (CSS, images) in system cache
+            loadRequestCounter = 0
             originalWebViewDelegate = webView.delegate
             webView.delegate = self
             webView.loadRequest(pageRequest.urlRequest)
@@ -166,6 +169,8 @@ extension PageCacheSession : UIWebViewDelegate {
         assert(Thread.isMainThread)
         assert(state == .running)
 
+        loadRequestCounter = max(0, loadRequestCounter + 1)
+
         if let originalDelegate = originalWebViewDelegate {
             originalDelegate.webViewDidStartLoad?(webView)
         }
@@ -176,12 +181,15 @@ extension PageCacheSession : UIWebViewDelegate {
         assert(Thread.isMainThread)
         assert(state == .running)
 
+        loadRequestCounter = max(0, loadRequestCounter - 1)
+
         if let originalDelegate = originalWebViewDelegate {
             originalDelegate.webViewDidFinishLoad?(webView)
         }
 
-        var isComplete = true
-        if let completedHandler = pageRequest.completedHandler {
+        var isComplete = loadRequestCounter == 0
+        if !isComplete,
+            let completedHandler = pageRequest.completedHandler {
             isComplete = completedHandler(pageRequest)
         }
         
@@ -201,6 +209,8 @@ extension PageCacheSession : UIWebViewDelegate {
 
         DDLog("WebView loadError: \(error)")
 
+        loadRequestCounter = max(0, loadRequestCounter - 1)
+
         if let originalDelegate = originalWebViewDelegate {
             originalDelegate.webView?(webView, didFailLoadWithError: error)
         }
@@ -210,7 +220,7 @@ extension PageCacheSession : UIWebViewDelegate {
                 // ignore this error http://stackoverflow.com/a/1053411/1084997
                 return
         }
-
+        // for now ignore loadRequestCounter == 0 check and always report error
         reportCompletion(error)
     }
 

@@ -29,6 +29,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             URL(string: "https://www.military.com/daily-news/2016/12/08/marine-hornet-pilot-killed-in-japan-identified.html?variant=mobile.app&hidebreadcrumb=yes")!,
             URL(string: "http://www.military.com/daily-news/2017/02/07/most-army-brigades-navy-planes-combat-ready-leaders.html?variant=mobile.app&hidebreadcrumb=yes")!,
             URL(string: "http://www.military.com/daily-news/2017/01/15/marine-killed-another-injured-training-accident.html?variant=mobile.app&hidebreadcrumb=yes")!,
+            URL(string: "https://undertheradar.military.com/2017/03/9-military-badasses-awesome-nicknames/?variant=mobile.app&hidebreadcrumb=yes")!,
             URL(string: "https://techcrunch.com/2016/12/19/apples-tim-cook-assures-employees-that-it-is-committed-to-the-mac-and-that-great-desktops-are-coming/")!,
             URL(string: "https://www.nasa.gov/feature/pluto-paints-its-largest-moon-red")!,
             URL(string: "https://www.nasa.gov/feature/scientists-probe-mystery-of-pluto-s-icy-heart")!,

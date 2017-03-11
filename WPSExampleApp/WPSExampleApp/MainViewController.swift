@@ -25,6 +25,7 @@ class MainViewController: UIViewController, UIWebViewDelegate {
         navigationController?.setNavigationBarHidden(true, animated: animated)
     }
     
+    var loadsCount: Int = 0
     @IBAction func loadWebpage() {
     
         print("All pages: \(PageManager.shared.allPages())")
@@ -32,6 +33,7 @@ class MainViewController: UIViewController, UIWebViewDelegate {
         if let url = dataModel.currentURL {
             webView.delegate = self
             let request = URLRequest(url: url)
+            loadsCount = 0
             webView.loadRequest(request)
         }
         else {
@@ -52,10 +54,15 @@ class MainViewController: UIViewController, UIWebViewDelegate {
 
     func webViewDidStartLoad(_ webView: UIWebView) {
         print("Original delegate webViewDidStartLoad")
+        loadsCount =  loadsCount + 1
     }
 
     func webViewDidFinishLoad(_ webView: UIWebView) {
         print("Original delegate webViewDidFinishLoad")
+        loadsCount =  loadsCount - 1
+        if 0 == loadsCount {
+            print("Completed page load")
+        }
     }
 
     func webView(_ webView: UIWebView, didFailLoadWithError error: Error) {
