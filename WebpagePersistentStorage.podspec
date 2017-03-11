@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name = 'WebpagePersistentStorage'
-  s.version = '0.0.4'
+  s.version = '0.0.5'
   s.license = ''
   s.summary = 'Webpage persistent storage SDK for iOS'
   s.homepage = 'https://github.com/sredko/WebpagePersistentStorage'
