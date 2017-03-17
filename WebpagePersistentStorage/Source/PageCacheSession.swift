@@ -94,13 +94,19 @@ internal class PageCacheSession : NSObject {
         
         if pageRequest.options.contains(.useRenderedByWebViewHTML) {
             // use processed by web view html
-            let htmlString = webView.stringByEvaluatingJavaScript(from: "document.documentElement.outerHTML")
-            pageSaver.webViewHTMLData = htmlString?.data(using: .utf8)
+            pageSaver.webViewHTMLData = webView.wps_loadedPageData()
+        }
+
+        var htmlPageData = pageSaver.htmlPageData
+        if nil == htmlPageData {
+            // fallback to page from loaded WebView (might result with wrong UI rendered)
+            DDLog("cachePage [\(url)]: page NOT found in cache, get from WebView")
+            pageSaver.webViewHTMLData = webView.wps_loadedPageData()
         }
         
         if let htmlPageData = pageSaver.htmlPageData {
 
-            DDLog("cachePage [\(url)]: page found in cache")
+            DDLog("cachePage [\(url)]: page data retrieved")
 
             // process HTML data
             if  let websiteURL = url.wps_websiteURL(),

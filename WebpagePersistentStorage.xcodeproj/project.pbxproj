@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E52291DA1E7C8A4700030950 /* UIWebView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E52291D91E7C8A4700030950 /* UIWebView+Extensions.swift */; };
 		E5630D2C1E1E0DE700D9C53A /* WebpagePersistentStorage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E5630D221E1E0DE600D9C53A /* WebpagePersistentStorage.framework */; };
 		E5630D311E1E0DE700D9C53A /* WebpagePersistentStorageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5630D301E1E0DE700D9C53A /* WebpagePersistentStorageTests.swift */; };
 		E5630D331E1E0DE700D9C53A /* WebpagePersistentStorage.h in Headers */ = {isa = PBXBuildFile; fileRef = E5630D251E1E0DE600D9C53A /* WebpagePersistentStorage.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -100,6 +101,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		E52291D91E7C8A4700030950 /* UIWebView+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIWebView+Extensions.swift"; sourceTree = "<group>"; };
 		E5630D221E1E0DE600D9C53A /* WebpagePersistentStorage.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = WebpagePersistentStorage.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E5630D251E1E0DE600D9C53A /* WebpagePersistentStorage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WebpagePersistentStorage.h; sourceTree = "<group>"; };
 		E5630D261E1E0DE600D9C53A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -266,6 +268,7 @@
 				E5630D451E1E106100D9C53A /* URLRequest+Extensions.swift */,
 				E5630E011E1EEBF100D9C53A /* XML+Extensions.swift */,
 				E56A6B7D1E45C11A00732C51 /* SyncAccess.swift */,
+				E52291D91E7C8A4700030950 /* UIWebView+Extensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -613,6 +616,7 @@
 				E5630D871E1E106100D9C53A /* PageSaverProtocol.swift in Sources */,
 				E5630D771E1E106100D9C53A /* LocalStorage.swift in Sources */,
 				E5630D611E1E106100D9C53A /* Data+Extensions.swift in Sources */,
+				E52291DA1E7C8A4700030950 /* UIWebView+Extensions.swift in Sources */,
 				E56A6B7E1E45C11A00732C51 /* SyncAccess.swift in Sources */,
 				E5630D891E1E106100D9C53A /* SingleHTMLFilePageSaver.swift in Sources */,
 				E5630D5D1E1E106100D9C53A /* CacheSessionManager.swift in Sources */,
